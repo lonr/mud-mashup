@@ -1,0 +1,26 @@
+{
+  "title": "扔泥巴",
+  "artist": "四川芬达",
+  "lyrics": [
+    { "lyric": "他们", "startTime": 117, "endTime": 500, "startBeat": 0.5, "endBeat": 1 },
+    { "lyric": "朝", "startTime": 501, "endTime": 955, "startBeat": 1, "endBeat": 1.5 },
+    { "lyric": "我", "startTime": 955, "endTime": 1256, "startBeat": 1.5, "endBeat": 2 },
+    { "lyric": "扔", "startTime": 1256, "endTime": 1568, "startBeat": 2, "endBeat": 2.5 },
+    { "lyric": "白菜", "startTime": 1578, "endTime": 2659, "startBeat": 2.5, "endBeat": 4 },
+    { "lyric": "⏎", "startTime": 2659, "endTime": 2777, "startBeat": 4, "endBeat": 4.5 },
+    { "lyric": "我", "startTime": 2777, "endTime": 2934, "startBeat": 4.5, "endBeat": 4.75 },
+    { "lyric": "拿", "startTime": 2934, "endTime": 3107, "startBeat": 4.75, "endBeat": 5 },
+    { "lyric": "白菜", "startTime": 3107, "endTime": 3750, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "炒", "startTime": 3750, "endTime": 4178, "startBeat": 6, "endBeat": 6.5 },
+    { "lyric": "盘菜", "startTime": 4178, "endTime": 5127, "startBeat": 6.5, "endBeat": 8 },
+    { "lyric": "⏎", "startTime": 5127, "endTime": 5200, "startBeat": 8, "endBeat": 8.5 },
+    { "lyric": "捡起", "startTime": 17200, "endTime": 17480, "startBeat": 4.75, "endBeat": 5 },
+    { "lyric": "烟头", "startTime": 17480, "endTime": 18083, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "抽两口", "startTime": 18083, "endTime": 19379, "startBeat": 6, "endBeat": 8 },
+    { "lyric": "粑粑", "startTime": 25982, "endTime": 26923, "startBeat": 10, "endBeat": 11 }
+  ],
+  "sample": [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 13, 5, 6, 12, 13, 14, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0,
+    1, 2, 3, 13, 5, 6, 12, 13, 14, 11, 0, 1, 2, 3, 15, 11, 6, 12, 15, 14, 11
+  ]
+}
