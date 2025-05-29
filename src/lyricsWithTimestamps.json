@@ -14,13 +14,37 @@
     { "lyric": "炒", "startTime": 3750, "endTime": 4178, "startBeat": 6, "endBeat": 6.5 },
     { "lyric": "盘菜", "startTime": 4178, "endTime": 5127, "startBeat": 6.5, "endBeat": 8 },
     { "lyric": "⏎", "startTime": 5127, "endTime": 5200, "startBeat": 8, "endBeat": 8.5 },
-    { "lyric": "捡起", "startTime": 17200, "endTime": 17480, "startBeat": 4.75, "endBeat": 5 },
+    { "lyric": "烟头", "startTime": 14447, "endTime": 15383, "startBeat": 2.5, "endBeat": 4 },
+    { "lyric": "捡起", "startTime": 17002, "endTime": 17480, "startBeat": 4.75, "endBeat": 5 },
     { "lyric": "烟头", "startTime": 17480, "endTime": 18083, "startBeat": 5, "endBeat": 6 },
     { "lyric": "抽两口", "startTime": 18083, "endTime": 19379, "startBeat": 6, "endBeat": 8 },
-    { "lyric": "粑粑", "startTime": 25982, "endTime": 26923, "startBeat": 10, "endBeat": 11 }
+    { "lyric": "粑粑", "startTime": 25982, "endTime": 26923, "startBeat": 2.5, "endBeat": 4 },
+    { "lyric": "粑粑", "startTime": 27741, "endTime": 28332, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "做", "startTime": 28348, "endTime": 28653, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "蛋挞", "startTime": 28686, "endTime": 29593, "startBeat": 6.5, "endBeat": 8 },
+    { "lyric": "披萨", "startTime": 34819, "endTime": 35807, "startBeat": 6.5, "endBeat": 8 },
+    { "lyric": "泥巴", "startTime": 44806, "endTime": 45746, "startBeat": 2.5, "endBeat": 4 },
+    { "lyric": "泥巴", "startTime": 46391, "endTime": 46950, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "种", "startTime": 47013, "endTime": 47281, "startBeat": 6, "endBeat": 6.5 },
+    { "lyric": "荷花", "startTime": 47309, "endTime": 48189, "startBeat": 6.5, "endBeat": 8 },
+    { "lyric": "石头", "startTime": 49928, "endTime": 50781, "startBeat": 2.5, "endBeat": 4 },
+    { "lyric": "石头", "startTime": 51497, "endTime": 52063, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "盖", "startTime": 52085, "endTime": 52407, "startBeat": 6, "endBeat": 6.5 },
+    { "lyric": "小楼", "startTime": 52398, "endTime": 53248, "startBeat": 6.5, "endBeat": 8 },
+    { "lyric": "骨头", "startTime": 66108, "endTime": 66810, "startBeat": 2.5, "endBeat": 4 },
+    { "lyric": "骨头", "startTime": 67470, "endTime": 68111, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "啃", "startTime": 68128, "endTime": 68431, "startBeat": 5, "endBeat": 6 },
+    { "lyric": "两口", "startTime": 68449, "endTime": 69359, "startBeat": 6.5, "endBeat": 8 },
+    { "lyric": "哦~哦~~", "startTime": 19756, "endTime": 22088, "startBeat": 0, "endBeat": 4 },
+    { "lyric": "哦~哦~", "startTime": 38429, "endTime": 40350, "startBeat": 4, "endBeat": 8 },
+    { "lyric": "我不是阿诺", "startTime": 22240, "endTime": 23848, "startBeat": 4, "endBeat": 8 },
+    { "lyric": "我的眼里只有阿坤", "startTime": 60197, "endTime": 63374, "startBeat": 2.5, "endBeat": 8 },
+    { "lyric": "没座", "startTime": 53263, "endTime": 54127, "startBeat": 4, "endBeat": 4.5 },
+    { "lyric": "没座", "startTime": 53263, "endTime": 54127, "startBeat": 8, "endBeat": 8.5 }
   ],
   "sample": [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 13, 5, 6, 12, 13, 14, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0,
-    1, 2, 3, 13, 5, 6, 12, 13, 14, 11, 0, 1, 2, 3, 15, 11, 6, 12, 15, 14, 11
+    0, 1, 2, 3, 21, 5, 6, 7, 22, 23, 24, 11, 0, 1, 2, 3, 25, 5, 6, 7, 26, 27, 28, 11, 0, 1, 2, 3, 29, 5, 6, 13, 30, 31,
+    32, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 12, 5, 6, 13, 14, 15, 11, 0, 1, 2, 3, 16, 5, 6, 7, 17, 18,
+    19, 11, 0, 1, 2, 3, 16, 5, 6, 7, 17, 18, 20, 11, 33, 34, 11, 35, 11, 36, 11, 38, 11
   ]
 }
