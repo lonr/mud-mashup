@@ -36,6 +36,7 @@ function App() {
   const [selected, setSelected] = useState<number[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
   const timeoutRef = useRef<number | null>(null);
   const hasInitialized = useRef(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
@@ -54,42 +55,42 @@ function App() {
   // Track if we're loading from URL to prevent unwanted scrolling
   const [isLoadingFromUrl, setIsLoadingFromUrl] = useState(false);
 
-  // Load shared lyrics from URL on component mount
+  // Load shared lyrics and emoji state from URL on component mount
   useEffect(() => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
     const urlParams = new URLSearchParams(window.location.search);
     const sharedLyrics = urlParams.get('lyrics');
+    const emojiParam = urlParams.get('emoji');
+
+    if (emojiParam === '1') setShowEmoji(true);
+    if (emojiParam === '0') setShowEmoji(false);
 
     if (sharedLyrics) {
       const decoded = decodeSelectedLyrics(sharedLyrics);
       if (decoded && decoded.length > 0) {
         setIsLoadingFromUrl(true);
         setSelected(decoded);
-        // Reset the flag after a short delay to allow normal scrolling behavior
         setTimeout(() => setIsLoadingFromUrl(false), 200);
         return;
       }
     }
-
-    // If no lyrics in URL, load sample
     setSelected(sample);
   }, []);
 
-  // Update URL when selected lyrics change (but not during initial load)
+  // Update URL when selected lyrics or showEmoji change (but not during initial load)
   useEffect(() => {
-    if (!hasInitialized.current) return; // Don't update URL during initialization
-
-    if (!isLoadingFromUrl && selected.length > 0) {
+    if (!hasInitialized.current) return;
+    if (!isLoadingFromUrl && (selected.length > 0 || showEmoji !== false)) {
       const encodedLyrics = encodeSelectedLyrics(selected);
-      const newUrl = `${window.location.pathname}?lyrics=${encodedLyrics}`;
+      const emojiParam = showEmoji ? '1' : '0';
+      const newUrl = `${window.location.pathname}?emoji=${emojiParam}&lyrics=${encodedLyrics}`;
       window.history.replaceState({}, '', newUrl);
-    } else if (!isLoadingFromUrl && selected.length === 0) {
-      // Clear URL params when no lyrics selected
+    } else if (!isLoadingFromUrl && selected.length === 0 && showEmoji === false) {
       window.history.replaceState({}, '', window.location.pathname);
     }
-  }, [selected, isLoadingFromUrl]);
+  }, [selected, isLoadingFromUrl, showEmoji]);
 
   // Keep repeat mode in a ref to always get latest value in async callbacks
   const isRepeatModeRef = useRef(isRepeatMode);
@@ -264,12 +265,11 @@ function App() {
 
     if (currentIndexRef.current >= selected.length) {
       if (isRepeatModeRef.current) {
-        // In repeat mode, restart from the beginning
         currentIndexRef.current = 0;
         setTimeout(() => playNextSegment(), 0); // avoid call stack overflow
         return;
       } else {
-        setIsPlaying(false);
+        setIsPlaying(false); // Only set to false when ALL segments are done
         isPlayingRef.current = false;
         stopAudio();
         currentIndexRef.current = 0;
@@ -302,15 +302,14 @@ function App() {
       return;
     }
 
-    const encodedLyrics = encodeSelectedLyrics(selected);
-    const shareUrl = `${window.location.origin}${window.location.pathname}?lyrics=${encodedLyrics}`;
+    const shareUrl = window.location.href;
 
     try {
       if (navigator.share) {
         // Use native sharing API if available (mobile devices)
         await navigator.share({
-          title: `${title} - 歌词混搭`,
-          text: '查看我创作的歌词混搭',
+          title: `${title} - 拼好歌`,
+          text: '查看我创作的拼好歌',
           url: shareUrl,
         });
       } else {
@@ -432,6 +431,28 @@ function App() {
     }
   }, [isEditing]);
 
+  // Media Session API integration
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new window.MediaMetadata({
+        title,
+        artist,
+        album: '拼好歌',
+        artwork: [{ src: `${import.meta.env.BASE_URL}mashup.png`, sizes: '512x512', type: 'image/png' }],
+      });
+      navigator.mediaSession.setActionHandler('play', () => setIsPlaying(true));
+      navigator.mediaSession.setActionHandler('pause', () => setIsPlaying(false));
+      navigator.mediaSession.setActionHandler('stop', () => setIsPlaying(false));
+      // Optionally add nexttrack, previoustrack, seekbackward, seekforward handlers
+    }
+  }, [title, artist]);
+
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+    }
+  }, [isPlaying]);
+
   return (
     <div className="h-dvh text-rose-50 bg-gradient-to-b from-rose-900 to-rose-950">
       {/* Screen reader announcements */}
@@ -528,7 +549,7 @@ function App() {
                                 : 'text-white/60' // Dimmed for upcoming lyrics
                             }`}
                           >
-                            {lyricData.lyric}
+                            {showEmoji && lyricData.emoji ? lyricData.emoji : lyricData.lyric}
                           </span>
                         );
                       }
@@ -542,8 +563,26 @@ function App() {
         {/* Footer with top blur overlay */}
         <footer className="flex flex-col items-center justify-center flex-shrink-0 relative" role="contentinfo">
           <nav className="flex gap-4 items-center my-4" role="toolbar" aria-label="播放控制">
+            <button
+              className={`flex items-center justify-center w-10 h-10 ${
+                !showEmoji ? 'bg-white/15' : 'bg-transparent'
+              } rounded-full hover:shadow-lg hover:bg-white/15 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50`}
+              onClick={() => setShowEmoji((prev) => !prev)}
+              aria-label={showEmoji ? '切换为文字歌词' : '切换为表情歌词'}
+              aria-pressed={showEmoji}
+              type="button"
+            >
+              {!showEmoji ? (
+                <span role="img" aria-label="文字">
+                  文
+                </span>
+              ) : (
+                <span role="img" aria-label="表情">
+                  😅
+                </span>
+              )}
+            </button>
             {/* Repeat button: always visible */}
-            <div className="w-10 h-10" aria-hidden="true"></div>
             <button
               className={`flex items-center justify-center w-10 h-10 ${
                 isRepeatMode ? 'bg-white/15' : 'bg-transparent'
@@ -648,21 +687,25 @@ function App() {
                 >
                   {Array.from(lyricsMap.keys())
                     .filter((lyricText) => lyricText !== '⏎')
-                    .map((lyricText) => (
-                      <button
-                        key={lyricText}
-                        className="bg-white/5 border border-transparent rounded-lg px-4 py-2 text-center font-semibold cursor-pointer select-none transition hover:bg-transparent min-w-[56px] min-h-[48px] text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
-                        onClick={() => addLyric(lyricText)}
-                        aria-label={`添加歌词: ${lyricText}`}
-                        type="button"
-                        tabIndex={0}
-                      >
-                        {lyricText}
-                      </button>
-                    ))}
+                    .map((lyricText) => {
+                      const firstIdx = lyricsMap.get(lyricText)?.[0];
+                      const emoji = firstIdx !== undefined ? lyrics[firstIdx].emoji : undefined;
+                      return (
+                        <button
+                          key={lyricText}
+                          className="bg-white/5 border border-transparent rounded-lg px-3 py-2 text-center font-semibold cursor-pointer select-none transition hover:bg-transparent  text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
+                          onClick={() => addLyric(lyricText)}
+                          aria-label={`添加歌词: ${lyricText}`}
+                          type="button"
+                          tabIndex={0}
+                        >
+                          {showEmoji && emoji ? emoji : lyricText}
+                        </button>
+                      );
+                    })}
                   <div className="flex ml-auto gap-2" role="group" aria-label="编辑操作">
                     <button
-                      className="flex items-center justify-center gap-2 px-5 py-2.5 bg-red-900 rounded-lg shadow hover:bg-red-700 transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400"
+                      className="flex items-center justify-center gap-2 px-5 py-2.5 min-w-[56px] bg-red-900 rounded-lg shadow hover:bg-red-700 transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-red-400"
                       onClick={() => setSelected([])}
                       disabled={selected.length === 0}
                       aria-label="清空所有歌词"
@@ -684,7 +727,7 @@ function App() {
                       <span className="sr-only">清空</span>
                     </button>
                     <button
-                      className="bg-white/5 border border-transparent rounded-lg px-4 py-2 text-center font-semibold cursor-pointer select-none transition hover:bg-transparent min-w-[56px] min-h-[48px] text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
+                      className="bg-white/5 border border-transparent rounded-lg px-3 py-2 min-w-[56px] text-center font-semibold cursor-pointer select-none transition hover:bg-transparent  text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
                       onClick={() => setSelected((prev) => prev.slice(0, -1))}
                       disabled={selected.length === 0}
                       aria-label="删除最后一个歌词"
@@ -693,7 +736,7 @@ function App() {
                       ⌫<span className="sr-only">退格</span>
                     </button>
                     <button
-                      className="bg-white/5 border border-transparent rounded-lg px-4 py-2 text-center font-semibold cursor-pointer select-none transition hover:bg-transparent min-w-[56px] min-h-[48px] text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
+                      className="bg-white/5 border border-transparent rounded-lg px-3 py-2 min-w-[56px] text-center font-semibold cursor-pointer select-none transition hover:bg-transparent  text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
                       onClick={() => addLyric('⏎')}
                       aria-label="添加换行"
                       type="button"
