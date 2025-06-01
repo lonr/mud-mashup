@@ -37,6 +37,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+  const [audioLoaded, setAudioLoaded] = useState(false);
   const timeoutRef = useRef<number | null>(null);
   const hasInitialized = useRef(false);
   const [statusMessage, setStatusMessage] = useState<string>('');
@@ -142,8 +143,10 @@ function App() {
           buffer,
           currentSource: null,
         };
+        setAudioLoaded(true);
       } catch (error) {
         console.error('Failed to initialize audio:', error);
+        setAudioLoaded(false);
       }
     };
 
@@ -233,6 +236,9 @@ function App() {
 
   // Play/stop functionality
   const playSegments = () => {
+    // Prevent play if audio not loaded
+    if (!audioLoaded) return;
+
     // If already playing, stop and reset everything
     if (isPlayingRef.current) {
       setIsPlaying(false);
@@ -459,7 +465,6 @@ function App() {
       <div aria-live="assertive" aria-atomic="true" className="sr-only" role="status">
         {statusMessage}
       </div>
-
       <div className="h-full flex flex-col">
         <header className="text-center py-3 flex-shrink-0 relative">
           <h1 className="text-2xl font-bold truncate px-6">{title}</h1>
@@ -482,12 +487,7 @@ function App() {
                 </p>
               ) : (
                 lines.map((line, lineIdx) => (
-                  <div
-                    key={lineIdx}
-                    className="flex flex-wrap justify-center mb-2 w-full min-w-0"
-                    role="group"
-                    aria-label={`歌词第${lineIdx + 1}行`}
-                  >
+                  <div key={lineIdx} className="mb-2 w-full min-w-0" role="group" aria-label={`歌词第${lineIdx + 1}行`}>
                     {line.map((idx, i) => {
                       const globalIdx = lines.slice(0, lineIdx).reduce((a, l) => a + l.length, 0) + i;
                       const lyricData = lyrics[idx];
@@ -602,8 +602,22 @@ function App() {
               onClick={playSegments}
               aria-label={isPlaying ? '停止播放' : '开始播放'}
               type="button"
+              disabled={!audioLoaded}
             >
-              {isPlaying ? (
+              {!audioLoaded ? (
+                // Loading spinner
+                <svg
+                  className="animate-spin"
+                  width="36"
+                  height="36"
+                  viewBox="0 0 36 36"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="18" cy="18" r="16" stroke="#fff" strokeWidth="4" opacity="0.2" />
+                  <path d="M34 18a16 16 0 0 0-16-16" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+                </svg>
+              ) : isPlaying ? (
                 <svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
                   <rect x="16" y="16" width="32" height="32" rx="4" />
                 </svg>
@@ -670,7 +684,6 @@ function App() {
               </svg>
             </button>
           </nav>
-
           {/* Editor Panel (integrated into the main UI, not fixed) */}
           {isEditing && (
             <section
