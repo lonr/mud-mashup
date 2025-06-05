@@ -706,7 +706,7 @@ function App() {
                       return (
                         <button
                           key={lyricText}
-                          className="bg-white/5 border border-transparent rounded-lg px-3 py-2 text-center font-semibold cursor-pointer select-none transition hover:bg-transparent  text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
+                          className="bg-white/5 border border-transparent rounded-lg px-3 py-2 text-center font-semibold cursor-pointer select-none transition hover:bg-transparent active:bg-transparent text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
                           onClick={() => addLyric(lyricText)}
                           aria-label={`添加歌词: ${lyricText}`}
                           type="button"
@@ -740,7 +740,7 @@ function App() {
                       <span className="sr-only">清空</span>
                     </button>
                     <button
-                      className="bg-white/5 border border-transparent rounded-lg px-3 py-2 min-w-[56px] text-center font-semibold cursor-pointer select-none transition hover:bg-transparent  text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
+                      className="bg-white/5 border border-transparent rounded-lg px-3 py-2 min-w-[56px] text-center font-semibold cursor-pointer select-none transition hover:bg-transparent active:bg-transparent text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
                       onClick={() => setSelected((prev) => prev.slice(0, -1))}
                       disabled={selected.length === 0}
                       aria-label="删除最后一个歌词"
@@ -749,7 +749,7 @@ function App() {
                       ⌫<span className="sr-only">退格</span>
                     </button>
                     <button
-                      className="bg-white/5 border border-transparent rounded-lg px-3 py-2 min-w-[56px] text-center font-semibold cursor-pointer select-none transition hover:bg-transparent  text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
+                      className="bg-white/5 border border-transparent rounded-lg px-3 py-2 min-w-[56px] text-center font-semibold cursor-pointer select-none transition hover:bg-transparent active:bg-transparent text-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white/50"
                       onClick={() => addLyric('⏎')}
                       aria-label="添加换行"
                       type="button"
